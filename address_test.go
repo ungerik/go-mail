@@ -34,6 +34,34 @@ func Test_ValidateAddress(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	_, err = ValidateAddress("Name@example.com")
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = ValidateAddress("NAme@x.y.z.example.co.uk")
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = ValidateAddress("NAME@example.aero")
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = ValidateAddress("X@example.com")
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = ValidateAddress("First.Last@example.com")
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = ValidateAddress("FIRST.middle.LAST@example.com")
+	if err != nil {
+		t.Error(err)
+	}
+	_, err = ValidateAddress("X+Y@example.com")
+	if err != nil {
+		t.Error(err)
+	}
 
 	// Invalid adresses
 	_, err = ValidateAddress("name@.com")
