@@ -56,7 +56,7 @@ func (self *Message) String() string {
 
 	from := &self.From
 	if from.Address == "" {
-		from = &Config.DefaultFrom
+		from = &Config.From
 	}
 	fmt.Fprintf(&buf, "From: %s%s", from.String(), crlf)
 	write("To: ", self.To)
@@ -85,7 +85,7 @@ func (self *Message) Send() error {
 	}
 	from := self.From.Address
 	if from == "" {
-		from = Config.DefaultFrom.Address
+		from = Config.From.Address
 	}
 	addr := fmt.Sprintf("%s:%d", Config.Host, Config.Port)
 	auth := smtp.PlainAuth("", Config.Username, Config.Password, Config.Host)

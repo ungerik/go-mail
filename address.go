@@ -16,7 +16,7 @@ func CompareAddressesCaseinsensitive(addressA, addressB string) bool {
 }
 
 // ValidateAddress uses a simplified regular expression for checking
-// email adresses. Please report real world adresses that are not working as bug.
+// email addresses. Please report real world addresses that are not working as bug.
 func ValidateAddress(address string) (normalizedAddress string, err error) {
 	normalizedAddress = strings.TrimSpace(address)
 	valid := emailRegexp.Match([]byte(normalizedAddress))

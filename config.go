@@ -2,15 +2,33 @@ package email
 
 import "net/mail"
 
-type Configuration struct {
-	Host        string
-	Port        uint16
-	Username    string
-	Password    string
-	DefaultFrom mail.Address
+var Config = Configuration{
+	Port: 587,
 }
 
-var Config Configuration
+type Configuration struct {
+	Host     string
+	Port     uint16
+	Username string
+	Password string
+	From     mail.Address
+}
+
+func (self *Configuration) Name() string {
+	return "email"
+}
+
+func (self *Configuration) Init() error {
+	if self.From.Address == "" {
+		self.From.Address = self.Username
+	}
+	_, err := ValidateAddress(self.From.Address)
+	return err
+}
+
+func (self *Configuration) Close() error {
+	return nil
+}
 
 func InitGmail(email, password string) error {
 	return InitGmailFrom(email, email, password)
@@ -27,11 +45,11 @@ func InitGmailFrom(fromAddress, loginAddress, password string) error {
 		return err
 	}
 	Config = Configuration{
-		Host:        "smtp.gmail.com",
-		Port:        587,
-		Username:    loginAddress,
-		Password:    password,
-		DefaultFrom: mail.Address{"", fromAddress},
+		Host:     "smtp.gmail.com",
+		Port:     587,
+		Username: loginAddress,
+		Password: password,
+		From:     mail.Address{Name: "", Address: fromAddress},
 	}
 	return nil
 }
