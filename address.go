@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-var emailRegexp *regexp.Regexp = regexp.MustCompile(`[a-zA-Z0-9\-+~_%]+[a-zA-Z0-9\-+~_%.]*@([a-z]+[a-z0-9\\-]*\.)+[a-z][a-z]+`)
+var emailRegexp *regexp.Regexp = regexp.MustCompile(`[a-zA-Z0-9\-+~_%]+[a-zA-Z0-9\-+~_%.]*@([a-z0-9]+[a-z0-9\-]*\.)+[a-z][a-z]+`)
 
 func NormalizeAddressLowercase(address string) string {
 	return strings.ToLower(strings.TrimSpace(address))
