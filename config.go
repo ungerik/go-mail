@@ -1,6 +1,8 @@
 package email
 
-import "net/mail"
+import (
+	"net/mail"
+)
 
 var Config = Configuration{
 	Port: 587,
