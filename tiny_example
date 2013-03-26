@@ -1,0 +1,13 @@
+email.Config.Host = "smtp.gmail.com"
+email.Config.Port = 25
+email.Config.From.Name = "My name"
+email.Config.From.Address = "is@me.com"
+email.Config.Username = "myusername"
+email.Config.Password = "myCrazyP4ssw0rd"
+
+mail := email.NewBriefMessage("No too much to say", "Hello Email World!!!", "to@you.com")
+err := mail.Send()
+
+if err != nil {
+	fmt.Println(err)
+}
