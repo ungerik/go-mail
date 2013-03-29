@@ -7,6 +7,8 @@ import (
 	"net/mail"
 	"net/smtp"
 	"time"
+	"crypto/md5"
+	"io"
 )
 
 func NewBriefMessage(subject, content string, to ...string) *Message {
@@ -62,8 +64,15 @@ func (self *Message) String() string {
 	write("To: ", self.To)
 	write("Cc: ", self.Cc)
 	write("Bcc: ", self.Bcc)
+	boundary := self.GetBoundary()
 	fmt.Fprintf(&buf, "Date: %s%s", time.Now().UTC().Format(time.RFC822), crlf)
-	fmt.Fprintf(&buf, "Subject: %s%s%s", self.Subject, crlf, self.Content)
+	fmt.Fprintf(&buf, "Subject: %s%s", self.Subject, crlf)
+	fmt.Fprintf(&buf, "Content-Type: multipart/alternative; boundary=%s%s%s", boundary, crlf, crlf)
+	fmt.Fprintf(&buf, "%s%s", "--"+boundary, crlf)
+	fmt.Fprintf(&buf, "Content-Type: text/plain; charset=ISO-8859-1%s", crlf)
+	fmt.Fprintf(&buf, "%s%s%s%s", crlf, self.Content, crlf, crlf)
+	fmt.Fprintf(&buf, "%s%s", "--"+boundary+"--", crlf)
+
 	return buf.String()
 }
 
@@ -90,4 +99,11 @@ func (self *Message) Send() error {
 	addr := fmt.Sprintf("%s:%d", Config.Host, Config.Port)
 	auth := smtp.PlainAuth("", Config.Username, Config.Password, Config.Host)
 	return smtp.SendMail(addr, auth, from, to, []byte(self.String()))
+}
+
+// Generate aun unique boundary value
+func (self *Message) GetBoundary() string {
+	h := md5.New()
+	io.WriteString(h, fmt.Sprintf("%s", time.Now().Nanosecond()))
+	return fmt.Sprintf("%x", h.Sum(nil))
 }
