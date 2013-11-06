@@ -16,10 +16,6 @@ type Configuration struct {
 	From     mail.Address
 }
 
-func (self *Configuration) Name() string {
-	return "email"
-}
-
 func (self *Configuration) Init() error {
 	if self.From.Address == "" {
 		self.From.Address = self.Username
